@@ -16,8 +16,6 @@ namespace GmailApiTest
     /// combination of type and key. This file data store stores a JSON format of the specified object.
     /// </summary>
 
-    //Install-Package Google.Apis.Plus.v1 
-
     readonly string folderPath;
 
     /// <summary>Gets the full folder path.</summary>
@@ -93,8 +91,6 @@ namespace GmailApiTest
       }
 
       TaskCompletionSource<T> tcs = new TaskCompletionSource<T> ();
-
-      var io = GenerateStoredKey (key, typeof (T));
 
       var filePath = Path.Combine (folderPath, GenerateStoredKey (key, typeof (T)));
       if (File.Exists (filePath)) {

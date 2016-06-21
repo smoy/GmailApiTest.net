@@ -21,11 +21,11 @@ namespace GmailApiTest
     {
     }
 
-    public static async Task<String> LatestMessage ()
+    public static async Task<String> LatestMessage (string relativePathForUserCredentials, string clientSecretFileName, DateTime since)
     {
       var homePath = Environment.GetEnvironmentVariable ("HOME");
-      var clientSecretPath = homePath + "/google_api_test/google_api_test_client_secret.json";
-      var storedUserCredentials = homePath + "/google_api_test/stored_user_creds";
+      var clientSecretPath = Path.Combine(homePath, relativePathForUserCredentials, clientSecretFileName);
+      var storedUserCredentials = Path.Combine (homePath, relativePathForUserCredentials, "stored_user_creds");
 
       UserCredential credential;
       using (var stream = new FileStream (clientSecretPath, FileMode.Open, FileAccess.Read)) {
@@ -39,12 +39,12 @@ namespace GmailApiTest
         ApplicationName = "Gmail Test",
       });
 
-      var five_minute_ago = DateTime.Now.Add (TimeSpan.FromMinutes (-5.0));
-      return await GetMessageIdSince (service, five_minute_ago);
+
+      return await GetLatestMessageSince (service, since);
 
     }
 
-    public static async Task<string> GetMessageIdSince (GmailService service, DateTime since)
+    public static async Task<string> GetLatestMessageSince (GmailService service, DateTime since)
     {
       const int maxTries = 10;
       int numTries = 0;
