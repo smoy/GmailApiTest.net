@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BFF6151F-63C2-4689-B3DE-46A00F16ABC9}</ProjectGuid>
+    <ProjectGuid>{2D7A8D13-7D45-4AC7-8919-3F02D9087321}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>GmailApiTest</RootNamespace>
-    <AssemblyName>GmailApiTest</AssemblyName>
+    <RootNamespace>GmailApiTest.Tests</RootNamespace>
+    <AssemblyName>GmailApiTest.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -30,6 +30,9 @@
     <Reference Include="System" />
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="AE.Net.Mail">
+      <HintPath>..\packages\AE.Net.Mail.1.7.10.0\lib\net45\AE.Net.Mail.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -61,16 +64,18 @@
     <Reference Include="Google.Apis.Gmail.v1">
       <HintPath>..\packages\Google.Apis.Gmail.v1.1.13.1.511\lib\portable-net45+netcore45+wpa81+wp8\Google.Apis.Gmail.v1.dll</HintPath>
     </Reference>
-    <Reference Include="AE.Net.Mail">
-      <HintPath>..\packages\AE.Net.Mail.1.7.10.0\lib\net45\AE.Net.Mail.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TestLatestMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocalFileDataStore.cs" />
-    <Compile Include="LatestMessageUtil.cs" />
+    <ProjectReference Include="..\GmailApiTest\GmailApiTest.csproj">
+      <Project>{BFF6151F-63C2-4689-B3DE-46A00F16ABC9}</Project>
+      <Name>GmailApiTest</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
