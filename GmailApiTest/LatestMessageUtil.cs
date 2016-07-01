@@ -54,17 +54,17 @@ namespace GmailApiTest
       string relativePathForUserCredentials, 
       string clientSecretFileName, 
       DateTime since,
-      string toEmailAddress = null
+      string toEmailAddress = null,
+      int maxTries = 10
     )
     {
       var service = await LatestMessageUtil.GetGmailService (relativePathForUserCredentials, clientSecretFileName, false);
-      return await GetLatestMessageSince (service, since, toEmailAddress);
+      return await GetLatestMessageSince (service, since, toEmailAddress, maxTries);
 
     }
 
-    public static async Task<MailMessage> GetLatestMessageSince (GmailService service, DateTime since, string toEmailAddress)
+    public static async Task<MailMessage> GetLatestMessageSince (GmailService service, DateTime since, string toEmailAddress, int maxTries = 10)
     {
-      const int maxTries = 10;
       int numTries = 0;
       while (numTries < maxTries) {
         var listRequest = service.Users.Messages.List ("me");
@@ -73,7 +73,7 @@ namespace GmailApiTest
           listRequest.Q = string.Format("to:{0}", toEmailAddress);
         }
         var listMessageResponses = listRequest.Execute ();
-        if (listMessageResponses.Messages.Count > 0) {
+        if (listMessageResponses.Messages != null && listMessageResponses.Messages.Count > 0) {
           var getRequest = service.Users.Messages.Get ("me", listMessageResponses.Messages [0].Id);
           getRequest.Format = UsersResource.MessagesResource.GetRequest.FormatEnum.Raw;
           var messageResposne = getRequest.Execute ();
@@ -84,9 +84,10 @@ namespace GmailApiTest
             return emailMessage;
           }
 
-          numTries++;
-          await Task.Delay (5000);
         }
+
+        numTries++;
+        await Task.Delay (5000);
 
       }
 

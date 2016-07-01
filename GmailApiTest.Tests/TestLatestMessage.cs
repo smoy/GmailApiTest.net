@@ -55,6 +55,14 @@ namespace GmailApiTest.Tests
       Assert.AreEqual (taggedAddress, message.To.First ().Address);
     }
 
+    [Test]
+    public async Task TestNoMessages ()
+    {
+      var five_minute_ago = DateTime.Now.Add (TimeSpan.FromMinutes (-5.0));
+      var message = await LatestMessageUtil.LatestMessage (RelativePathForUserCreds, ClientSecretsFilename, five_minute_ago, "never", 2);
+      Assert.IsNull (message);
+    }
+
     public async Task SendMessage (string toEmailAddress)
     {
       var message = new MailMessage () {
